@@ -6,6 +6,62 @@ let pageBusy=false;
 let pageBusyUntil=0;
 const pageIds=pages.map(p=>p.id);
 
+/* V14 — opening animation: one falling red dot grows into a full-screen matrix */
+const introScreen=$('#introScreen'), introGrid=$('#introGrid'), introSkip=$('#introSkip');
+let introFinished=false;
+
+function buildIntroMatrix(){
+  if(!introGrid)return;
+  const mobile=innerWidth<=850;
+  const cols=mobile?10:18;
+  const rows=Math.max(10,Math.ceil(innerHeight/(mobile?42:54)));
+  const gapX=innerWidth/(cols+1);
+  const gapY=innerHeight/(rows+1);
+  const frag=document.createDocumentFragment();
+  const total=cols*rows;
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      const dot=document.createElement('i');
+      dot.className='intro-grid-dot';
+      const x=(c+1)*gapX-innerWidth/2;
+      const y=(r+1)*gapY-innerHeight/2;
+      const dist=Math.hypot(x/(innerWidth*.7),y/(innerHeight*.7));
+      const wave=Math.min(.52,dist*.24);
+      const jitter=(Math.random()-.5)*.08;
+      dot.style.setProperty('--x',`${x.toFixed(1)}px`);
+      dot.style.setProperty('--y',`${y.toFixed(1)}px`);
+      dot.style.setProperty('--delay',`${(.58+wave+jitter).toFixed(3)}s`);
+      frag.appendChild(dot);
+    }
+  }
+  introGrid.replaceChildren(frag);
+}
+function finishIntro(){
+  if(introFinished||!introScreen)return;
+  introFinished=true;
+  introScreen.classList.add('is-exiting');
+  document.body.classList.remove('intro-lock');
+  setTimeout(()=>introScreen.classList.add('is-finished'),560);
+}
+function startIntro(){
+  if(!introScreen)return;
+  document.body.classList.add('intro-lock');
+  buildIntroMatrix();
+  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if(reduced){setTimeout(finishIntro,420);return;}
+  setTimeout(finishIntro,2450);
+}
+introSkip?.addEventListener('click',e=>{e.stopPropagation();finishIntro();});
+introScreen?.addEventListener('click',e=>{
+  if(performance.now()<650)return;
+  finishIntro();
+});
+addEventListener('resize',()=>{
+  if(!introFinished)buildIntroMatrix();
+});
+startIntro();
+
+
 function tone(freq=300,d=.07,vol=.025,type='sine'){
  if(!soundOn)return;
  audio ||= new (window.AudioContext||window.webkitAudioContext)();

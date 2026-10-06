@@ -6,10 +6,18 @@
 <title>YAYOI KUSAMA — 无限之间</title>
 <meta name="description" content="LINGMU · Yayoi Kusama interactive scroll-orb art archive">
 <meta name="theme-color" content="#f7f5ef">
-<link rel="canonical" href="https://lingmu.com/">
+<link rel="canonical" href="https://limuli027.github.io/kusama-website/">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div id="introScreen" class="intro-screen" aria-hidden="false">
+  <div class="intro-seed" aria-hidden="true"></div>
+  <div id="introGrid" class="intro-grid" aria-hidden="true"></div>
+  <div class="intro-caption" aria-hidden="true">
+    <span>ONE DOT</span><i>→</i><span>INFINITE</span>
+  </div>
+  <button id="introSkip" class="intro-skip" type="button">SKIP INTRO</button>
+</div>
 <div class="ambient" aria-hidden="true"></div>
 <canvas id="bgCanvas"></canvas>
 <div id="cursor"></div>
