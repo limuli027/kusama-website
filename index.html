@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YAYOI KUSAMA — 无限之间</title>
+<meta name="description" content="LINGMU · Yayoi Kusama interactive scroll-orb art archive">
+<meta name="theme-color" content="#f7f5ef">
+<link rel="canonical" href="https://lingmu.com/">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<canvas id="bgCanvas"></canvas>
+<div id="cursor"></div>
+<div id="wipe"></div>
+<div id="heroTransitionDot" aria-hidden="true"></div>
+
+<header class="topbar">
+  <button class="brand" data-page="home"><span class="brand-dot"></span>YAYOI KUSAMA</button>
+  <div class="topright">
+    <button id="sound" class="micro">SOUND <b>OFF</b></button>
+    <button id="menuOpen" class="hamb"><i></i><i></i><i></i></button>
+  </div>
+</header>
+
+<aside id="menu" class="menu">
+  <button id="menuClose" class="close">×</button>
+  <button id="menuNext" class="menu-bg-dot" aria-label="进入下一章节"><span>NEXT<br>02 / LIFE</span></button>
+  <div class="menu-content">
+    <small>AN INTERACTIVE ART STUDY / 2026</small>
+    <button data-page="home"><span>01</span> ENTER</button>
+    <button data-page="life"><span>02</span> LIFE</button>
+    <button data-page="dots"><span>03</span> DOTS</button>
+    <button data-page="works"><span>04</span> WORKS</button>
+    <button data-page="orb"><span>05</span> SCROLL ORB</button>
+    <button data-page="infinity"><span>06</span> INFINITY</button>
+    <button data-page="about"><span>07</span> ABOUT</button>
+  </div>
+</aside>
+
+<main id="app">
+<section class="page active" id="home">
+  <div class="hero-noise"></div>
+  <div class="hero-copy">
+    <p class="kicker">A MEMORY OF INFINITY</p>
+    <h1>YAYOI<br><em>KUSAMA</em></h1>
+    <div class="hero-bottom">
+      <p class="reveal-text">波点、重复、镜像与无限。<br>从一个圆点，进入一个不断扩张的世界。</p>
+      <button class="enter" data-page="life">ENTER THE UNIVERSE <b>↗</b></button>
+    </div>
+  </div>
+  <div class="hero-orbit orbit-a"></div>
+  <button class="hero-orbit orbit-b" id="heroOrb" aria-label="拖拽或点击红色圆球"></button>
+  <div class="hero-mark">1929—2026</div>
+  <div class="scroll-tip">SCROLL / MOVE / CLICK</div>
+</section>
+
+<section class="page" id="life">
+  <div class="section-intro">
+    <p class="kicker">02 / LIFE</p>
+    <h2>从一个圆点，<br><em>走向无限。</em></h2>
+    <p class="reveal-text">草间弥生的艺术实践横跨绘画、雕塑、装置、文学与表演。她长期使用重复、增殖、镜面和波点，构成独特的视觉语言。</p>
+  </div>
+  <div class="life-line"></div>
+  <div class="life-list">
+    <article data-life="0"><button class="life-dot-trigger" aria-label="查看1929年事件详情"></button><time>1929</time><div><h3>松本 · 早年</h3><p class="reveal-text">出生于日本长野县松本市。童年时期开始绘画，并逐渐发展出波点与网状图案。</p></div></article>
+    <article data-life="1"><button class="life-dot-trigger" aria-label="查看1957至1958年事件详情"></button><time>1957—58</time><div><h3>纽约 · 转向前卫艺术</h3><p class="reveal-text">赴美国后在纽约生活与创作，发展出网络绘画、软雕塑以及空间装置等实践。</p></div></article>
+    <article data-life="2"><button class="life-dot-trigger" aria-label="查看1960年代事件详情"></button><time>1960s</time><div><h3>重复 · 增殖 · 自我消融</h3><p class="reveal-text">镜面、灯光、软雕塑和环境作品不断扩展“重复”的尺度，观者开始进入作品内部。</p></div></article>
+    <article data-life="3"><button class="life-dot-trigger" aria-label="查看1973年以后事件详情"></button><time>1973—</time><div><h3>回到日本 · 跨媒介创作</h3><p class="reveal-text">回国后继续绘画、写作与大型装置创作，“Infinity Mirror Room”系列逐渐成为重要实践。</p></div></article>
+    <article data-life="4"><button class="life-dot-trigger" aria-label="查看2017至2026年事件详情"></button><time>2017—2026</time><div><h3>无限持续</h3><p class="reveal-text">东京草间弥生美术馆于2017年开馆。她持续创作至生命晚期，并留下跨越多个媒介的作品与文字。</p></div></article>
+  </div>
+  <div class="life-detail" id="lifeDetail" aria-hidden="true">
+    <button class="life-detail-close" id="lifeDetailClose" aria-label="关闭事件详情">×</button>
+    <small id="lifeDetailKicker">01 / 1929</small>
+    <h3 id="lifeDetailTitle">松本 · 早年</h3>
+    <p id="lifeDetailText"></p>
+    <div class="life-detail-meta" id="lifeDetailMeta"></div>
+  </div>
+  <div class="life-dots" aria-hidden="true"></div>
+</section>
+
+<section class="page dark" id="dots">
+  <div class="dots-title">
+    <p class="kicker">03 / DOTS</p>
+    <h2>让一个点，<br><em>不断复制。</em></h2>
+    <p>移动鼠标：推动波点。<br>点击：复制波点。<br>连续点击：让空间不断增殖。</p>
+  </div>
+  <canvas id="dotCanvas"></canvas>
+  <div class="dot-counter"><span id="dotCount">0</span> DOTS</div>
+  <div id="dotHint">CLICK TO MULTIPLY</div>
+  <div id="dotPanel"><button>×</button><small>POLKA DOT</small><h3>重复并不是静止。</h3><p>当一个简单的圆被不断复制，它开始形成节奏、覆盖和空间。草间弥生把这种持续的重复发展为自己的艺术语言。</p></div>
+</section>
+
+<section class="page" id="works">
+  <div class="section-intro works-intro">
+    <p class="kicker">04 / WORKS</p>
+    <h2>八个入口，<br><em>进入她的世界。</em></h2>
+    <p class="reveal-text">点击作品卡片进入档案模式。以绘画、雕塑、装置与影像为入口，观察波点如何从一个图案扩展成完整的艺术语言。</p>
+  </div>
+  <div class="works-grid">
+    <article class="work-card photo" data-key="mirror">
+      <div class="work-image"><img src="assets/infinity-room.jpg" alt="镜面空间与波点装置" loading="lazy"><span>01</span></div>
+      <div><small>INSTALLATION</small><h3>Infinity Mirror Room</h3><p>镜像 / 无限 / 空间</p></div>
+    </article>
+    <article class="work-card photo yellow" data-key="yellow">
+      <div class="work-image"><img src="assets/yellow-sculpture.jpg" alt="黄色波点雕塑" loading="lazy"><span>02</span></div>
+      <div><small>SCULPTURE / ENVIRONMENT</small><h3>Yellow Polka Dot</h3><p>波点 / 形体 / 环境</p></div>
+    </article>
+    <article class="work-card photo" data-key="pumpkin">
+      <div class="work-image"><img src="assets/red-pumpkin.jpg" alt="红色波点南瓜雕塑" loading="lazy"><span>03</span></div>
+      <div><small>SCULPTURE</small><h3>Pumpkin</h3><p>南瓜 / 重复 / 日常意象</p></div>
+    </article>
+    <article class="work-card photo cyan" data-key="surface">
+      <div class="work-image"><img src="assets/blue-vase.jpg" alt="蓝色波点器物" loading="lazy"><span>04</span></div>
+      <div><small>OBJECT STUDY</small><h3>Dot Surface</h3><p>器物 / 表皮 / 重复</p></div>
+    </article>
+    <article class="work-card photo orange" data-key="dotsobs">
+      <div class="work-image"><img src="assets/dot-performance.jpg" alt="草间弥生在波点环境中" loading="lazy"><span>05</span></div>
+      <div><small>PERFORMANCE / DOTS</small><h3>Dots Obsession</h3><p>身体 / 波点 / 消融</p></div>
+    </article>
+    <article class="work-card photo" data-key="fish">
+      <div class="work-image"><img src="assets/fish-dot.jpg" alt="波点鱼图案" loading="lazy"><span>06</span></div>
+      <div><small>PATTERN STUDY</small><h3>Dot Language</h3><p>图案 / 色彩 / 符号</p></div>
+    </article>
+    <article class="work-card photo" data-key="flower">
+      <div class="work-image"><img src="assets/flower-installation.jpg" alt="波点花朵装置" loading="lazy"><span>07</span></div>
+      <div><small>SCULPTURE / SPACE</small><h3>Color Space</h3><p>装置 / 环境 / 体验</p></div>
+    </article>
+    <article class="work-card photo" data-key="gallery">
+      <div class="work-image"><img src="assets/dot-gallery.jpg" alt="波点绘画展览空间" loading="lazy"><span>08</span></div>
+      <div><small>EXHIBITION</small><h3>Infinite Wall</h3><p>观看 / 参与 / 无限</p></div>
+    </article>
+  </div>
+</section>
+
+<section class="page orb-page orb-array-page" id="orb" aria-label="阵列式滚动作品浏览页面">
+  <div class="orb-grid" aria-hidden="true"></div>
+  <div class="orb-head">
+    <div><span class="orb-brand-dot"></span> YAYOI KUSAMA</div>
+    <div class="orb-head-right">ARRAY / SCROLL <span>EXPAND THE WORKS</span></div>
+  </div>
+  <div class="orb-array-sticky">
+    <div class="orb-copy array-copy">
+      <p class="kicker">05 / ARRAY ARCHIVE</p>
+      <div class="orb-index"><span id="orbIndex">01</span><i>/</i><span id="orbTotal">08</span></div>
+      <h2 id="orbTitle">Infinity Mirror Room</h2>
+      <p id="orbType">INSTALLATION / MIRROR / INFINITY</p>
+      <p id="orbDesc">向下滑动，作品从一个紧密的圆点逐渐展开成阵列。每一张作品卡都成为无限视觉中的一个节点。</p>
+      <div class="orb-controls"><span>01</span><div id="orbProgress"><i></i></div><span>08</span></div>
+      <div class="array-scroll-note">SCROLL TO EXPAND<br><span>DRAG / WHEEL / SWIPE</span></div>
+    </div>
+    <div class="array-field" id="orbStage" aria-label="作品阵列，可滚动展开">
+      <div class="array-crosshair" aria-hidden="true"></div>
+      <div class="array-track" id="orbArrayTrack"></div>
+    </div>
+    <div class="orb-side-dots" id="orbSideDots" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="page dark" id="infinity">
+  <div class="infinity-copy">
+    <p class="kicker">06 / INFINITY</p>
+    <h2>你看到的是空间，<br><em>还是无限的自己？</em></h2>
+    <p class="reveal-text">移动鼠标，让镜屋产生视差。点击一次，让波点复制；再点击一次，让空间继续增殖。</p>
+    <button id="multiply" class="outline">MULTIPLY <b>+</b></button>
+  </div>
+  <div id="room" class="room dot-room">
+    <div class="dot-room-grid" aria-hidden="true"></div>
+    <div id="roomDots"></div><div class="room-label">INFINITY</div>
+    <div class="copy-guide">CLICK ANYWHERE TO MULTIPLY<br><span>ONE DOT → MANY DOTS → NO END</span></div>
+  </div>
+</section>
+
+<section class="page" id="about">
+  <div class="about-wrap">
+    <div class="portrait-wrap">
+      <div class="portrait-halo"></div>
+      <img src="assets/portrait.jpg" alt="草间弥生肖像" loading="eager">
+      <div class="portrait-caption">YAYOI KUSAMA / 1929—2026</div>
+    </div>
+    <div class="bio">
+      <p class="kicker">07 / ABOUT THE ARTIST</p>
+      <h2>草间弥生<br><em>Yayoi Kusama</em></h2>
+      <p class="lead">前卫艺术家、小说家。她以波点、网状绘画、软雕塑、镜面装置等视觉语言，持续探索重复、无限与自我消融。</p>
+      <p>草间弥生1929年出生于日本松本。1957年赴美国，随后在纽约开展创作；1973年返回日本。她的实践跨越绘画、雕塑、装置、文学与表演，并持续围绕“无限”的主题展开。2026年8月14日，她于东京去世，享年97岁。</p>
+      <div class="bio-tags"><span>POLKA DOT</span><span>INFINITY</span><span>REPETITION</span><span>MIRROR</span><span>SELF-OBLITERATION</span></div>
+      <div class="source-note">资料参考：YAYOI KUSAMA Official Site / 页面中的作品说明为入门式概述。</div>
+    </div>
+  </div>
+  <footer><span>AN INTERACTIVE MEMORY / YAYOI KUSAMA</span><button data-page="home">BACK TO TOP ↑</button></footer>
+</section>
+</main>
+
+<div id="workModal" class="modal"><div class="modal-box"><button class="modal-close">×</button><div id="modalVisual"></div><div class="modal-info"><small id="modalType"></small><h3 id="modalTitle"></h3><p id="modalText"></p><div class="modal-key" id="modalKey"></div></div></div></div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
