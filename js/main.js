@@ -271,18 +271,61 @@ const lifeEvents=[
  {k:'05 / 2017—2026',title:'无限持续',text:'2017年东京草间弥生美术馆开馆。此后她持续以绘画、雕塑、装置等媒介发展“无限”的视觉体系，直至2026年。',meta:'关键词：美术馆 / 无限镜屋 / 装置 / 晚期创作'}
 ];
 const lifeDetail=$('#lifeDetail');
+const lifeDetailDrag=$('#lifeDetailDrag');
+let lifeDetailOpenIndex=-1;
+let lifeDetailDragging=false, lifeDetailDragOffsetX=0, lifeDetailDragOffsetY=0, lifeDetailDetached=false;
+function clampDetailPosition(x,y){
+ const pad=14, rect=lifeDetail.getBoundingClientRect();
+ return {x:Math.max(pad,Math.min(innerWidth-rect.width-pad,x)),y:Math.max(70,Math.min(innerHeight-rect.height-pad,y))};
+}
+function placeLifeDetailNear(trigger, preserveDrag=false){
+ if(!lifeDetail || !trigger || (preserveDrag && lifeDetailDetached))return;
+ const r=trigger.getBoundingClientRect();
+ // Prefer the right side of the red dot, then fall back to the left/below on narrow screens.
+ const box=lifeDetail.getBoundingClientRect();
+ let x=r.right+24, y=r.top-box.height/2+r.height/2;
+ if(x+box.width>innerWidth-14)x=r.left-box.width-24;
+ if(x<14)x=Math.min(innerWidth-box.width-14,r.left+18);
+ if(y<70)y=70;
+ if(y+box.height>innerHeight-14)y=innerHeight-box.height-14;
+ const pos=clampDetailPosition(x,y);
+ lifeDetail.style.left=pos.x+'px';lifeDetail.style.top=pos.y+'px';lifeDetail.style.right='auto';lifeDetail.style.bottom='auto';
+ lifeDetailDetached=false;
+}
+function clearLifeDetail(){
+ if(!lifeDetail)return;
+ lifeDetail.classList.remove('show');lifeDetail.setAttribute('aria-hidden','true');
+ lifeDetailOpenIndex=-1; lifeDetailDetached=false; lifeDetail.style.left='';lifeDetail.style.top='';lifeDetail.style.right='';lifeDetail.style.bottom='';
+}
 function openLifeDetail(i){
  const d=lifeEvents[i]; if(!d||!lifeDetail)return;
+ const trigger=$$('.life-dot-trigger')[i];
+ lifeDetailOpenIndex=i;
  $('#lifeDetailKicker').textContent=d.k; $('#lifeDetailTitle').textContent=d.title; $('#lifeDetailText').textContent=d.text; $('#lifeDetailMeta').textContent=d.meta;
- lifeDetail.classList.add('show'); lifeDetail.setAttribute('aria-hidden','false'); tone(320,.08,.018,'triangle');
+ lifeDetail.classList.add('show'); lifeDetail.setAttribute('aria-hidden','false');
+ requestAnimationFrame(()=>placeLifeDetailNear(trigger));
+ tone(320,.08,.018,'triangle');
 }
 $$('.life-list article').forEach((article,i)=>article.querySelector('.life-dot-trigger')?.addEventListener('click',e=>{e.stopPropagation();openLifeDetail(i)}));
-$('#lifeDetailClose')?.addEventListener('click',()=>{lifeDetail.classList.remove('show');lifeDetail.setAttribute('aria-hidden','true')});
+$('#lifeDetailClose')?.addEventListener('click',clearLifeDetail);
+$('#lifeDetailClear')?.addEventListener('click',clearLifeDetail);
+window.addEventListener('scroll',()=>{if(lifeDetailOpenIndex>=0 && !lifeDetailDetached){const t=$$('.life-dot-trigger')[lifeDetailOpenIndex];if(t)placeLifeDetailNear(t)}},{passive:true});
+window.addEventListener('resize',()=>{if(lifeDetailOpenIndex>=0 && !lifeDetailDetached){const t=$$('.life-dot-trigger')[lifeDetailOpenIndex];if(t)placeLifeDetailNear(t)}else if(lifeDetailOpenIndex>=0){const r=lifeDetail.getBoundingClientRect(),pos=clampDetailPosition(r.left,r.top);lifeDetail.style.left=pos.x+'px';lifeDetail.style.top=pos.y+'px';}});
+function startLifeDetailDrag(e){
+ if(!lifeDetail?.classList.contains('show'))return;
+ e.preventDefault();lifeDetailDragging=true;
+ const r=lifeDetail.getBoundingClientRect();lifeDetailDragOffsetX=e.clientX-r.left;lifeDetailDragOffsetY=e.clientY-r.top;
+ lifeDetailDetached=true;lifeDetail.classList.add('is-dragging');
+}
+lifeDetailDrag?.addEventListener('pointerdown',startLifeDetailDrag);
+lifeDetail?.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;if(e.target===lifeDetail)startLifeDetailDrag(e)});
+window.addEventListener('pointermove',e=>{if(!lifeDetailDragging)return;const pos=clampDetailPosition(e.clientX-lifeDetailDragOffsetX,e.clientY-lifeDetailDragOffsetY);lifeDetail.style.left=pos.x+'px';lifeDetail.style.top=pos.y+'px';});
+window.addEventListener('pointerup',()=>{lifeDetailDragging=false;lifeDetail?.classList.remove('is-dragging')});
 
 $('#menuOpen').onclick=()=>{menu.classList.add('open');tone(330,.05,.02)};
 $('#menuClose').onclick=()=>menu.classList.remove('open');
 $('#menuNext').onclick=()=>showPage('life');
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){menu.classList.remove('open');$('#workModal').classList.remove('open')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){menu.classList.remove('open');$('#workModal').classList.remove('open');clearLifeDetail()}});
 
 let mx=innerWidth/2,my=innerHeight/2,tx=mx,ty=my;
 const cursor=$('#cursor');
@@ -357,16 +400,37 @@ const data={
  garden:{type:'INSTALLATION',title:'Narcissus Garden',text:'镜面球体形成连续的反射表面。观者在作品中看到自己，也看到环境与他人的观看行为。',key:['MIRROR','REFLECTION','SELF']}
 };
 function openWork(key){
- const d=data[key],visual=$('#modalVisual');visual.innerHTML='';
+ const d=data[key],visual=$('#modalVisual');visual.className='modal-visual';visual.innerHTML='';
  if(d.img){const im=document.createElement('img');im.src=d.img;im.alt=d.title;visual.appendChild(im)}
  else {visual.className='modal-visual';visual.innerHTML=key==='nets'?'<div style="height:100%;background:radial-gradient(circle,#111 0 2px,transparent 3px);background-size:16px 16px"></div>':'<div style="height:100%;background:radial-gradient(circle,#fff 0 40px,transparent 41px),#1739b7"></div>'}
  $('#modalType').textContent=d.type;$('#modalTitle').textContent=d.title;$('#modalText').textContent=d.text;
  $('#modalKey').innerHTML=d.key.map(x=>`<span>${x}</span>`).join('');
  $('#workModal').classList.add('open');tone(280,.08,.02);
 }
+function openOrbWork(i){
+ const d=orbWorks[i]; if(!d)return;
+ const visual=$('#modalVisual'); visual.innerHTML=''; visual.className='modal-visual orb-modal-visual';
+ if(d.video){
+   const frame=document.createElement('iframe');
+   frame.src=d.video.replace('autoplay=1','autoplay=1');
+   frame.title=d.title; frame.loading='lazy'; frame.allow='autoplay; encrypted-media; picture-in-picture'; frame.allowFullscreen=true;
+   visual.appendChild(frame);
+ }else if(d.img){
+   const im=document.createElement('img'); im.src=d.img; im.alt=d.title; im.loading='eager'; visual.appendChild(im);
+ }
+ $('#modalType').textContent=d.type; $('#modalTitle').textContent=d.title; $('#modalText').textContent=d.desc;
+ $('#modalKey').innerHTML=d.type.split('/').map(x=>`<span>${x.trim()}</span>`).join('');
+ $('#workModal').classList.add('open'); tone(280,.08,.02);
+}
 $$('.work-card').forEach(c=>c.onclick=()=>openWork(c.dataset.key));
-$('.modal-close').onclick=()=>$('#workModal').classList.remove('open');
-$('#workModal').onclick=e=>{if(e.target.id==='workModal')e.currentTarget.classList.remove('open')};
+function closeWorkModal(){
+ const modal=$('#workModal');
+ const frame=$('#modalVisual')?.querySelector('iframe');
+ if(frame)frame.src='about:blank';
+ modal.classList.remove('open');
+}
+$('.modal-close').onclick=closeWorkModal;
+$('#workModal').onclick=e=>{if(e.target.id==='workModal')closeWorkModal()};
 
 let roomReady=false;
 function initRoom(){
@@ -434,11 +498,11 @@ updateReveal();
 
 /* LINGMU V13 — pinned editorial array: blank → reveal → spread → drift */
 const orbWorks=[
- {title:'Infinity Mirror Room',type:'INSTALLATION / MIRROR / INFINITY',desc:'镜面、光线与重复的波点共同构成无限感。作品成为阵列中的第一个入口。',img:'assets/infinity-room.jpg'},
- {title:'Yellow Polka Dot',type:'SCULPTURE / ENVIRONMENT / DOT',desc:'黄色与黑色的重复圆点覆盖形体，让雕塑从单一物体变成完整的视觉环境。',img:'assets/yellow-sculpture.jpg'},
- {title:'Pumpkin',type:'SCULPTURE / PUMPKIN / DOT',desc:'南瓜成为反复出现的视觉意象，圆润形体与波点覆盖形成强烈的视觉识别。',img:'assets/red-pumpkin.jpg'},
- {title:'Dot Surface',type:'OBJECT / SURFACE / REPETITION',desc:'当波点覆盖日常器物，表面本身成为观看的焦点，重复把普通形体转化为视觉符号。',img:'assets/blue-vase.jpg'},
- {title:'Infinity Mirror Rooms',type:'VIDEO / INSTALLATION / MOVING IMAGE',desc:'动态影像让作品从静态观看进入真实的空间节奏，成为阵列中的运动节点。',video:'https://www.youtube.com/embed/bT7i507OnOw?autoplay=1&mute=1&loop=1&playlist=bT7i507OnOw&rel=0&modestbranding=1'},
+ {title:'Pumpkin',type:'PAINTING / PUMPKIN / DOTS',desc:'画面以黄色南瓜形体和密集黑色圆点构成强烈对比，呈现草间弥生反复探索的南瓜意象与重复图案。仅凭当前图片无法可靠确认具体创作年份与完整题名，因此这里不标注未经核实的年代。',img:'assets/archive-pumpkin-yellow.jpg'},
+ {title:'Field',type:'PAINTING / ACRYLIC ON CANVAS / 1989',desc:'《Field》（1989），丙烯画布作品。画面把玉米、葡萄等果蔬形象与红黑网状背景、圆点纹样并置。佳士得对同名作品的说明指出，果蔬意象与丰饶、重复及标志性图案相关；此处按作品图像作入门式解读。资料：Christie’s，Field，1989。',img:'assets/archive-field-1989.jpg'},
+ {title:'Bird 2',type:'PAINTING / ACRYLIC / 1989',desc:'根据上传文件名暂标为《Bird 2》（1989，丙烯画）。鸟与果实等自然形象被安排在器皿般的构图中，背景则由重复的网纹和圆点组成。这里的题名依据图片文件名，若要用于正式学术展签，建议再以作品背签或权威图录核对。',img:'assets/archive-bird-2-1989.jpg'},
+ {title:'Shellfish',type:'PRINT / SCREENPRINT / 1989',desc:'《Shellfish》（1989），丝网版画。多种贝壳形态分布在绿色网状背景上，贝壳内部又覆盖不同尺度的圆点与重复纹样。自然形态与密集图案交织，呈现草间作品中反复出现的重复、装饰性与视觉增殖。作品名称、年代与版种可由相关艺术品图录交叉核对。',img:'assets/archive-shellfish-1989.jpg'},
+ {title:'Infinity Mirror Rooms',type:'VIDEO / INSTALLATION / MOVING IMAGE',desc:'动态影像呈现镜面装置的空间节奏与重复反射。点击卡片打开视频播放窗口；卡片本身使用静态封面，避免页面滚动时自动播放。',video:'https://www.youtube.com/embed/bT7i507OnOw?autoplay=1&mute=1&loop=1&playlist=bT7i507OnOw&rel=0&modestbranding=1',poster:'assets/dot-performance.jpg'},
  {title:'Dot Language',type:'PATTERN / COLOR / SYMBOL',desc:'鲜明色彩与不同尺度的圆点形成密集节奏，展示波点如何从单一符号扩展成视觉语言。',img:'assets/fish-dot.jpg'},
  {title:'Color Space',type:'SCULPTURE / SPACE / EXPERIENCE',desc:'大型彩色形体把波点从平面推向空间，观看者在形体、颜色与环境之间移动。',img:'assets/flower-installation.jpg'},
  {title:'Infinite Wall',type:'EXHIBITION / PATTERN / VIEWING',desc:'大量不同尺度的图案并置，让重复、差异与观看路径同时成为展览体验的一部分。',img:'assets/dot-gallery.jpg'}
@@ -452,7 +516,7 @@ function buildOrbArray(){
  if(!orbTrack || orbArrayReady)return;
  orbTrack.innerHTML=orbWorks.map((d,i)=>{
    const media=d.video
-    ? `<iframe src="${d.video}" title="${d.title}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture"></iframe>`
+    ? `<img src="${d.poster || 'assets/dot-performance.jpg'}" alt="${d.title} 视频封面" loading="lazy"><span class="array-video-play" aria-hidden="true">▶</span>`
     : `<img src="${d.img}" alt="${d.title}" loading="lazy">`;
    return `<article class="array-card" data-array-index="${i}">
       <div class="array-card-media">${media}</div>
@@ -461,12 +525,20 @@ function buildOrbArray(){
     </article>`;
  }).join('');
  orbArrayReady=true;
- $$('.array-card').forEach(card=>card.addEventListener('click',()=>{
-   const i=Number(card.dataset.arrayIndex);
-   if(!Number.isFinite(i))return;
-   const max=Math.max(1,orbPage.scrollHeight-orbPage.clientHeight);
-   orbPage.scrollTo({top:max*(0.08+i*.105),behavior:'smooth'});
- }));
+ $$('.array-card').forEach(card=>{
+   const open=()=>{
+     const i=Number(card.dataset.arrayIndex);
+     if(!Number.isFinite(i))return;
+     // Each artwork opens its own detail; the video card opens the player.
+     openOrbWork(i);
+   };
+   card.setAttribute('role','button');
+   card.setAttribute('tabindex','0');
+   card.addEventListener('click',open);
+   card.addEventListener('keydown',e=>{
+     if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}
+   });
+ });
 }
 function lerp(a,b,t){return a+(b-a)*t}
 function clamp01(v){return Math.max(0,Math.min(1,v))}

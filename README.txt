@@ -1,6 +1,6 @@
-LINGMU · YAYOI KUSAMA INTERACTIVE WEB V13
+LINGMU · YAYOI KUSAMA INTERACTIVE WEB V16
 
-V13 rebuilds the artwork archive as a pinned editorial scroll sequence:
+V16 rebuilds the artwork archive as a pinned editorial scroll sequence:
 - At the beginning, the artwork area is intentionally blank.
 - The first scroll gently reveals the first work from the center.
 - Continued scrolling staggers the remaining works into a 4×2 visual array.
@@ -21,3 +21,10 @@ V14 更新说明
 5. 暂未设置自定义域名。当前正式地址仍为：
    https://limuli027.github.io/kusama-website/
    以后购买域名后，再在 GitHub Pages 的 Custom domain 中配置即可。
+
+
+V16 ARRAY ARCHIVE 更新：
+- 替换前四个图片作品格：Pumpkin、Field（1989）、Bird 2（按提供文件名暂标，正式展签建议核对背签/图录）、Shellfish（1989）。
+- 第五格视频保留，改为静态封面，点击后打开视频播放窗口。
+- 作品卡支持鼠标点击、触屏点击和键盘 Enter/Space 打开详情。
+- 视频关闭时停止播放。
