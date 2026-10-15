@@ -389,9 +389,9 @@ $('#dotPanel button').onclick=()=>$('#dotPanel').classList.remove('show');
 
 const data={
  surface:{type:'OBJECT STUDY',title:'Dot Surface',text:'波点覆盖器物表面后，日常形体被转化为强烈的视觉符号。',key:['OBJECT','SURFACE','DOT'],img:'assets/blue-vase.jpg'},
- fish:{type:'PATTERN STUDY',title:'Dot Language',text:'鲜明色彩与重复圆点形成密集节奏，展示波点如何从单一符号扩展为完整的视觉语言。',key:['PATTERN','COLOR','DOT'],img:'assets/fish-dot.jpg'},
- flower:{type:'SCULPTURE / SPACE',title:'Color Space',text:'大型彩色形体把波点从平面推向空间，让观看者在形体与环境之间移动。',key:['SCULPTURE','SPACE','COLOR'],img:'assets/flower-installation.jpg'},
- gallery:{type:'EXHIBITION',title:'Infinite Wall',text:'大量不同尺度的图案并置，让重复、差异与观看路径同时成为展览体验的一部分。',key:['EXHIBITION','PATTERN','VIEWING'],img:'assets/dot-gallery.jpg'},
+ fish:{type:'SCREEN PRINT / 1989',title:'KY133 Lizard',text:'《KY133 Lizard》（1989），丝网版画，100版。红黑棋盘格铺陈背景，人物、蜥蜴、蝴蝶与花朵散布其间，并以密集圆点和鲜艳色彩连接画面。作品将自然形象与幻想场景结合，可从重复图案、色彩对比和日常世界的奇幻化来理解。',key:['LIZARD','SCREEN PRINT','DOTS'],img:'assets/archive-lizard-1989.jpg'},
+ flower:{type:'SCREEN PRINT / 1989',title:'KY131 Hello',text:'《KY131 Hello》（1989），丝网版画，100版。画面以黄色圆点形体为视觉中心，窗户中的人物、植物与糖果等元素共同构成带有童话感的场景。重复圆点和强烈色彩让熟悉的形象变得奇异，呈现艺术家将日常经验转化为个人视觉世界的方式。',key:['HELLO','SCREEN PRINT','DOTS'],img:'assets/archive-hello-1989.jpg'},
+ gallery:{type:'SCREEN PRINT / 1989',title:'KY123 Night',text:'《KY123 Night》（1989），丝网版画，100版。画面描绘装饰繁复的蛋糕与蜥蜴，并以紫色网状背景和棋盘格地面组织空间。食物与动物被置入鲜明的幻想场景，圆点、网纹和重复线条共同营造出既俏皮又充满节奏的视觉效果。',key:['NIGHT','SCREEN PRINT','PATTERN'],img:'assets/archive-night-1989.jpg'},
  mirror:{type:'INSTALLATION',title:'Infinity Mirror Room',text:'镜面、光线与重复的波点共同构成无限感。观者进入空间后，边界被反射不断延伸，观看本身成为作品体验的一部分。',key:['MIRROR','SPACE','INFINITY'],img:'assets/infinity-room.jpg'},
  yellow:{type:'SCULPTURE / ENVIRONMENT',title:'Yellow Polka Dot',text:'黄色与黑色波点覆盖大型形体，使物体从日常尺度进入一种强烈的视觉环境。',key:['DOT','FORM','ENVIRONMENT'],img:'assets/yellow-sculpture.jpg'},
  pumpkin:{type:'SCULPTURE',title:'Pumpkin',text:'南瓜是草间弥生反复使用的意象之一。鲜明的颜色、圆润的形体和波点覆盖，让自然形体变成高度辨识的视觉符号。',key:['PUMPKIN','DOT','SCULPTURE'],img:'assets/red-pumpkin.jpg'},
@@ -503,9 +503,9 @@ const orbWorks=[
  {title:'Bird 2',type:'PAINTING / ACRYLIC / 1989',desc:'根据上传文件名暂标为《Bird 2》（1989，丙烯画）。鸟与果实等自然形象被安排在器皿般的构图中，背景则由重复的网纹和圆点组成。这里的题名依据图片文件名，若要用于正式学术展签，建议再以作品背签或权威图录核对。',img:'assets/archive-bird-2-1989.jpg'},
  {title:'Shellfish',type:'PRINT / SCREENPRINT / 1989',desc:'《Shellfish》（1989），丝网版画。多种贝壳形态分布在绿色网状背景上，贝壳内部又覆盖不同尺度的圆点与重复纹样。自然形态与密集图案交织，呈现草间作品中反复出现的重复、装饰性与视觉增殖。作品名称、年代与版种可由相关艺术品图录交叉核对。',img:'assets/archive-shellfish-1989.jpg'},
  {title:'Infinity Mirror Rooms',type:'VIDEO / INSTALLATION / MOVING IMAGE',desc:'动态影像呈现镜面装置的空间节奏与重复反射。点击卡片打开视频播放窗口；卡片本身使用静态封面，避免页面滚动时自动播放。',video:'https://www.youtube.com/embed/bT7i507OnOw?autoplay=1&mute=1&loop=1&playlist=bT7i507OnOw&rel=0&modestbranding=1',poster:'assets/dot-performance.jpg'},
- {title:'Dot Language',type:'PATTERN / COLOR / SYMBOL',desc:'鲜明色彩与不同尺度的圆点形成密集节奏，展示波点如何从单一符号扩展成视觉语言。',img:'assets/fish-dot.jpg'},
- {title:'Color Space',type:'SCULPTURE / SPACE / EXPERIENCE',desc:'大型彩色形体把波点从平面推向空间，观看者在形体、颜色与环境之间移动。',img:'assets/flower-installation.jpg'},
- {title:'Infinite Wall',type:'EXHIBITION / PATTERN / VIEWING',desc:'大量不同尺度的图案并置，让重复、差异与观看路径同时成为展览体验的一部分。',img:'assets/dot-gallery.jpg'}
+ {title:'KY133 Lizard',type:'SCREEN PRINT / 1989 / EDITION OF 100',desc:'《KY133 Lizard》（1989），丝网版画，100版。红黑棋盘格铺陈背景，人物、蜥蜴、蝴蝶与花朵散布其间，并以密集圆点和鲜艳色彩连接画面。作品将自然形象与幻想场景结合，可从重复图案、色彩对比和日常世界的奇幻化来理解。',img:'assets/archive-lizard-1989.jpg'},
+ {title:'KY131 Hello',type:'SCREEN PRINT / 1989 / EDITION OF 100',desc:'《KY131 Hello》（1989），丝网版画，100版。画面以黄色圆点形体为视觉中心，窗户中的人物、植物与糖果等元素共同构成带有童话感的场景。重复圆点和强烈色彩让熟悉的形象变得奇异，呈现艺术家将日常经验转化为个人视觉世界的方式。',img:'assets/archive-hello-1989.jpg'},
+ {title:'KY123 Night',type:'SCREEN PRINT / 1989 / EDITION OF 100',desc:'《KY123 Night》（1989），丝网版画，100版。画面描绘装饰繁复的蛋糕与蜥蜴，并以紫色网状背景和棋盘格地面组织空间。食物与动物被置入鲜明的幻想场景，圆点、网纹和重复线条共同营造出既俏皮又充满节奏的视觉效果。',img:'assets/archive-night-1989.jpg'}
 ];
 let orbIndex=0, orbLastNearest=-1, orbArrayReady=false, orbArrayRaf=0;
 let orbTargetProgress=0, orbVisualProgress=0;
